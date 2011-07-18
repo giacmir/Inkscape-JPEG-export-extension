@@ -1,0 +1,18 @@
+    <inkscape-extension>
+        <_name>JPEG Export</_name>
+        <id>id.giac.export.jpg</id>
+        <dependency type="executable" location="extensions">jpegexport.py</dependency>
+		<param name="help" type="description">Please select the area of the drawing that you wish to export and then provide the exported file name (with full path) and the background color of the exported jpeg.</param>
+        <param name="path" type="string"  _gui-text="Export path">~</param>
+		<param name="bgcol" type="string" _gui-text="Background color">#ffffff</param>
+        <effect>
+            <object-type>all</object-type>
+            <effects-menu>
+                <submenu _name="Export as JPG" />
+            </effects-menu>
+        </effect>
+        <script>
+            <command reldir="extensions" interpreter="python">jpegexport.py</command>
+        </script>
+    </inkscape-extension>
+
