@@ -21,7 +21,6 @@ sys.path.append('/usr/share/inkscape/extensions')
 
 import subprocess
 import math
-import re
 
 import inkex
 
@@ -32,32 +31,31 @@ class JPEGExport(inkex.Effect):
 
 		self.OptionParser.add_option("--path",action="store", type="string", dest="path", default="~",help="")
 		self.OptionParser.add_option("--bgcol",action="store",type="string",dest="bgcol",default="",help="")
+		self.OptionParser.add_option("--page",action="store",type="string",dest="page",default=False,help="")
 		
 
 	def effect(self):
 		"""get selected item coords and call command line command to export as a png"""
 
-		if len(self.selected)==0:
-			sys.stderr.write('Please select something.')
-			exit()
-
-		coords=self.processSelected()
+		
 		outfile=self.options.path
 		curfile = self.args[-1]
 		bgcol = self.options.bgcol
-		command="inkscape -a %s:%s:%s:%s -e \"/tmp/jpinkexp.png\" -b \"%s\" %s" % (int(coords[0]), int(coords[1]), int(coords[2]), int(coords[3]),bgcol,curfile)
+		
+		if self.options.page == "false":
 
-		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		return_code = p.wait()
-		f = p.stdout
-		err = p.stderr
+			if len(self.selected)==0:
+				sys.stderr.write('Please select something.')
+				exit()
 
-		command="convert -quality 100 -density 90 /tmp/jpinkexp.png %s" % (outfile)
 
-		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		return_code = p.wait()
-		f = p.stdout
-		err = p.stderr
+			coords=self.processSelected()
+			self.exportArea(int(coords[0]),int(coords[1]),int(coords[2]),int(coords[3]),curfile,outfile,bgcol)
+
+		elif self.options.page == "true":
+			
+			self.exportPage(curfile,outfile,bgcol)
+		
 
 
 	def processSelected(self):
@@ -106,6 +104,37 @@ class JPEGExport(inkex.Effect):
 
 		coords=[startx,starty,endx,endy]
 		return coords
+
+	def exportArea(self,x0,y0,x1,y1,curfile,outfile,bgcol):
+		command="inkscape -a %s:%s:%s:%s -e \"/tmp/jpinkexp.png\" -b \"%s\" %s" % (x0, y0, x1, y1,bgcol,curfile)
+
+		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		return_code = p.wait()
+		f = p.stdout
+		err = p.stderr
+
+		self.tojpeg(outfile)
+
+	def exportPage(self,curfile,outfile,bgcol):
+		
+		command="inkscape -C -e \"/tmp/jpinkexp.png\" -b\"%s\" %s" % (bgcol,curfile)
+
+		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		return_code = p.wait()
+		f = p.stdout
+		err = p.stderr
+
+		self.tojpeg(outfile)
+
+		
+	def tojpeg(self,outfile):
+
+		command="convert -quality 100 -density 90 /tmp/jpinkexp.png %s" % (outfile)
+
+		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		return_code = p.wait()
+		f = p.stdout
+		err = p.stderr
 
 def _main():
 	e=JPEGExport()
