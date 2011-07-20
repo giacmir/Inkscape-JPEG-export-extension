@@ -14,7 +14,7 @@
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Author: Giacomo Mirabassi <giacomo@mirabassi.it>
-# Version: 0.2
+# Version: 0.1
 
 import sys
 sys.path.append('/usr/share/inkscape/extensions')
@@ -23,7 +23,6 @@ import subprocess
 import math
 
 import inkex
-import simpletransform
 
 class JPEGExport(inkex.Effect):
 	def __init__(self):
@@ -46,7 +45,7 @@ class JPEGExport(inkex.Effect):
 		if self.options.page == "false":
 
 			if len(self.selected)==0:
-				inkex.errormsg('Please select something.')
+				sys.stderr.write('Please select something.')
 				exit()
 
 
@@ -65,7 +64,6 @@ class JPEGExport(inkex.Effect):
 		starty=None
 		endx=None
 		endy=None
-		nodelist=[]
 
 		root=self.document.getroot();
 
@@ -75,18 +73,36 @@ class JPEGExport(inkex.Effect):
 		
 		for id in self.selected:
 			
-			nodelist.append(self.getElementById(id))
+			rawprops=[]
 
-		bbox=simpletransform.computeBBox(nodelist)
-		
-		startx=math.ceil(bbox[0])
-		endx=math.ceil(bbox[1])
-		h=-bbox[2]+bbox[3]
-		starty=toty-math.ceil(bbox[2])-h
-		endy=toty-math.ceil(bbox[2])
+			for prop in props:
+				
+
+				command=("inkscape", "--without-gui", "--query-id", id, "--query-"+prop,self.args[-1])
+				proc=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+				proc.wait()
+				rawprops.append(math.ceil(inkex.unittouu(proc.stdout.read())))
+
+			nodeEndX=rawprops[0]+rawprops[2]
+			nodeStartY=toty-rawprops[1]-rawprops[3]
+			nodeEndY=toty-rawprops[1]
+
+
+			if rawprops[0] < startx or startx==None: 
+				startx=rawprops[0]
+
+			if  nodeStartY < starty or starty == None:
+				starty = nodeStartY
+
+			
+			if nodeEndX > endx or endx == None:
+				endx = nodeEndX
+
+			if nodeEndY > endy or endy == None:
+				endy = nodeEndY
+
 
 		coords=[startx,starty,endx,endy]
-
 		return coords
 
 	def exportArea(self,x0,y0,x1,y1,curfile,outfile,bgcol):
