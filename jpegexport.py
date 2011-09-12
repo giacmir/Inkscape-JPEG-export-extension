@@ -23,6 +23,7 @@ import subprocess
 import math
 
 import inkex
+import simpletransform
 
 class JPEGExport(inkex.Effect):
 	def __init__(self):
@@ -32,6 +33,7 @@ class JPEGExport(inkex.Effect):
 		self.OptionParser.add_option("--path",action="store", type="string", dest="path", default="~",help="")
 		self.OptionParser.add_option("--bgcol",action="store",type="string",dest="bgcol",default="",help="")
 		self.OptionParser.add_option("--page",action="store",type="string",dest="page",default=False,help="")
+		self.OptionParser.add_option("--fast",action="store",type="string",dest="fast",default=True,help="")
 		
 
 	def effect(self):
@@ -64,6 +66,7 @@ class JPEGExport(inkex.Effect):
 		starty=None
 		endx=None
 		endy=None
+		nodelist=[]
 
 		root=self.document.getroot();
 
@@ -72,35 +75,48 @@ class JPEGExport(inkex.Effect):
 		props=['x','y','width','height']
 		
 		for id in self.selected:
-			
-			rawprops=[]
-
-			for prop in props:
+		
+			if self.options.fast == "true": # uses simpletransform
 				
+				nodelist.append(self.getElementById(id))
 
-				command=("inkscape", "--without-gui", "--query-id", id, "--query-"+prop,self.args[-1])
-				proc=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-				proc.wait()
-				rawprops.append(math.ceil(inkex.unittouu(proc.stdout.read())))
+			else: # uses command line 
+				rawprops=[]
+	
+				for prop in props:
+					
+					command=("inkscape", "--without-gui", "--query-id", id, "--query-"+prop,self.args[-1])
+					proc=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+					proc.wait()
+					rawprops.append(math.ceil(inkex.unittouu(proc.stdout.read())))
+	
+				nodeEndX=rawprops[0]+rawprops[2]
+				nodeStartY=toty-rawprops[1]-rawprops[3]
+				nodeEndY=toty-rawprops[1]
+	
+				if rawprops[0] < startx or startx==None: 
+					startx=rawprops[0]
+	
+				if  nodeStartY < starty or starty == None:
+					starty = nodeStartY
+	
+				
+				if nodeEndX > endx or endx == None:
+					endx = nodeEndX
+	
+				if nodeEndY > endy or endy == None:
+					endy = nodeEndY
 
-			nodeEndX=rawprops[0]+rawprops[2]
-			nodeStartY=toty-rawprops[1]-rawprops[3]
-			nodeEndY=toty-rawprops[1]
 
+		if self.options.fast == "true": # uses simpletransform
 
-			if rawprops[0] < startx or startx==None: 
-				startx=rawprops[0]
+			bbox=simpletransform.computeBBox(nodelist)
 
-			if  nodeStartY < starty or starty == None:
-				starty = nodeStartY
-
-			
-			if nodeEndX > endx or endx == None:
-				endx = nodeEndX
-
-			if nodeEndY > endy or endy == None:
-				endy = nodeEndY
-
+			startx=math.ceil(bbox[0])
+			endx=math.ceil(bbox[1])
+			h=-bbox[2]+bbox[3]
+			starty=toty-math.ceil(bbox[2])-h
+			endy=toty-math.ceil(bbox[2])
 
 		coords=[startx,starty,endx,endy]
 		return coords
@@ -139,6 +155,7 @@ class JPEGExport(inkex.Effect):
 def _main():
 	e=JPEGExport()
 	e.affect()
+	exit()
 
 if __name__=="__main__":
 	_main()

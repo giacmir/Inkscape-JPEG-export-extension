@@ -5,7 +5,8 @@
 		<param name="help" type="description">Please select the area of the drawing that you wish to export and then provide the exported file name (with full path) and the background color of the exported jpeg.</param>
         <param name="path" type="string"  _gui-text="Export path">~</param>
 		<param name="bgcol" type="string" _gui-text="Background color">#ffffff</param>
-		<param name="page" type="boolean" _gui-text="Export whole page">False</param>
+		<param name="page" type="boolean" _gui-text="Export whole page">false</param>
+		<param name="fast" type="boolean" _gui-text="Fast export (suggested)">true</param>
         <effect>
             <object-type>all</object-type>
             <effects-menu>
