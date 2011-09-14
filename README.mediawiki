@@ -1,0 +1,28 @@
+==Inkscape Jpeg Export Extension==
+
+This is a small and basic [http://inkscape.org Inkscape] extension that allows to export directly to a jpg file instead of the standard png. It is one of my first works in python and is developed for my personal needs, so I will be glad if you find it useful, but I can't say if it will work for you too.
+
+===How does it works===
+
+This extension simply exports a png image and then convert it to jpg using '''imagemagick'''; this mean that you must have imagemagick installed to make it work.
+The extension has three exporting modes:
+
+* '''full page export''' exports the whole page.
+* '''fast mode export''' uses the inkscape's simpletransfor library to determine area and position of the selected objects and exports them. This have some issues with masks and clips, and, in inkscape version prior to 0.49, with images. in any other case this is the recommended method since is much much faster than the one below. 
+* '''normal mode export''' calls a command line inkscape instance for every selected object to get it's data. This method doesn't have any problems with clips, masks and images but is very, very slower than the one above if you have selected many objects.
+
+
+===Installation===
+
+Just drop the two jpegexport.* files in your extensions folder (usually ~/.config/inkscape/extensions in Linux or C:\Programes\Inkscape\share\extensions in Windows).
+
+===Usage===
+
+The extension can be found in the ''extensions'' menu under the ''Export as JPG'' label. 
+
+====Options====
+
+* '''Export path''': write here the full path and file name of the resulting image
+* '''Background color''': Since jpg does not support transparences the image will have a background color. Default is white, if you want to change it insert in this field the desired color in rgb html notation (e.g. #000000 for black).
+* '''Export whole page''': check this if you want to export the whole page instead of a selection. 
+* '''Fast export''': Use the fast or the normal export mode (see above for details). It is recommended to always check this box unless you are using masks or clips. This option is useless if you are exporting the whole page.
