@@ -1,0 +1,20 @@
+    <inkscape-extension>
+        <_name>Esporta JPEG</_name>
+        <id>id.giac.export.jpg</id>
+        <dependency type="executable" location="extensions">jpegexport.py</dependency>
+		<param name="help" type="description">Selezionare l'area del disegno che si desidera esportare e indicare nome e percorso del file di destinazione e il colore di sfondo del jpeg risultante.</param>
+        <param name="path" type="string"  _gui-text="Percorso di esportazione">~</param>
+		<param name="bgcol" type="string" _gui-text="Colore di sfondo">#ffffff</param>
+		<param name="page" type="boolean" _gui-text="Esporta tutta la pagina">false</param>
+		<param name="fast" type="boolean" _gui-text="Esportazione veloce (consigliato)">true</param>
+        <effect>
+            <object-type>all</object-type>
+            <effects-menu>
+                <submenu _name="Esporta JPEG" />
+            </effects-menu>
+        </effect>
+        <script>
+            <command reldir="extensions" interpreter="python">jpegexport.py</command>
+        </script>
+    </inkscape-extension>
+

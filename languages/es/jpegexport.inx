@@ -1,0 +1,20 @@
+    <inkscape-extension>
+        <_name>JPEG</_name>
+        <id>id.giac.export.jpg</id>
+        <dependency type="executable" location="extensions">jpegexport.py</dependency>
+		<param name="help" type="description">Configurar párametros</param>
+        <param name="path" type="string"  _gui-text="Ubicación">~</param>
+		<param name="bgcol" type="string" _gui-text="Color de fondo">#ffffff</param>
+		<param name="page" type="boolean" _gui-text="Exportar página">false</param>
+		<param name="fast" type="boolean" _gui-text="Baja calidad (recomendado)">true</param>
+        <effect>
+            <object-type>all</object-type>
+            <effects-menu>
+                <submenu _name="Exportar" />
+            </effects-menu>
+        </effect>
+        <script>
+            <command reldir="extensions" interpreter="python">jpegexport.py</command>
+        </script>
+    </inkscape-extension>
+

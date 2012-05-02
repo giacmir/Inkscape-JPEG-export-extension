@@ -26,3 +26,10 @@ The extension can be found in the ''extensions'' menu under the ''Export as JPG'
 * '''Background color''': Since jpg does not support transparences the image will have a background color. Default is white, if you want to change it insert in this field the desired color in rgb html notation (e.g. #000000 for black).
 * '''Export whole page''': check this if you want to export the whole page instead of a selection. 
 * '''Fast export''': Use the fast or the normal export mode (see above for details). It is recommended to always check this box unless you are using masks or clips. This option is useless if you are exporting the whole page.
+
+===Other languages===
+
+Some translated .inx files are provided under the '''languages/''' directory. If you wish to use one of those languages just install the .inx file located in the language folder instead of the one that is in the root folder.
+
+====Translators====
+* '''Es''': Prar
