@@ -6,7 +6,7 @@
         <param name="path" type="string"  _gui-text="Ubicación">~</param>
 		<param name="bgcol" type="string" _gui-text="Color de fondo">#ffffff</param>
 		<param name="page" type="boolean" _gui-text="Exportar página">false</param>
-		<param name="fast" type="boolean" _gui-text="Baja calidad (recomendado)">true</param>
+		<param name="fast" type="boolean" _gui-text="Ràpido (recomendado)">true</param>
         <effect>
             <object-type>all</object-type>
             <effects-menu>
