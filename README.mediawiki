@@ -33,3 +33,4 @@ Some translated .inx files are provided under the '''languages/''' directory. If
 
 ====Translators====
 * '''Es''': Prar
+* '''Ja''': junichi11 [https://github.com/junichi11]
