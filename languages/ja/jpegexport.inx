@@ -1,0 +1,20 @@
+    <inkscape-extension>
+        <_name>JPEG Export</_name>
+        <id>id.giac.export.jpg</id>
+        <dependency type="executable" location="extensions">jpegexport.py</dependency>
+		<param name="help" type="description">エクスポートしたい描画領域を選択し、エクスポートされるファイル名（フルパス）とJPEGの背景色を入力してください。 </param>
+        <param name="path" type="string"  _gui-text="エクスポートパス">~</param>
+		<param name="bgcol" type="string" _gui-text="背景色">#ffffff</param>
+		<param name="page" type="boolean" _gui-text="ページ全体をエクスポート">false</param>
+		<param name="fast" type="boolean" _gui-text="高速エクスポート (推奨)">true</param>
+        <effect>
+            <object-type>all</object-type>
+            <effects-menu>
+                <submenu _name="Export as JPG" />
+            </effects-menu>
+        </effect>
+        <script>
+            <command reldir="extensions" interpreter="python">jpegexport.py</command>
+        </script>
+    </inkscape-extension>
+
