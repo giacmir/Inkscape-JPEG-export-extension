@@ -14,9 +14,10 @@
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Author: Giacomo Mirabassi <giacomo@mirabassi.it>
-# Version: 0.1
+# Version: 0.2
 
 import sys
+import os
 sys.path.append('/usr/share/inkscape/extensions')
 
 import subprocess
@@ -26,6 +27,7 @@ import inkex
 import simpletransform
 
 class JPEGExport(inkex.Effect):
+	
 	def __init__(self):
 		"""init the effetc library and get options from gui"""
 		inkex.Effect.__init__(self)
@@ -122,7 +124,9 @@ class JPEGExport(inkex.Effect):
 		return coords
 
 	def exportArea(self,x0,y0,x1,y1,curfile,outfile,bgcol):
-		command="inkscape -a %s:%s:%s:%s -e \"/tmp/jpinkexp.png\" -b \"%s\" %s" % (x0, y0, x1, y1,bgcol,curfile)
+		
+		tmp = self.getTmpPath()
+		command="inkscape -a %s:%s:%s:%s -e \"%sjpinkexp.png\" -b \"%s\" %s" % (x0, y0, x1, y1,tmp,bgcol,curfile)
 
 		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		return_code = p.wait()
@@ -133,7 +137,8 @@ class JPEGExport(inkex.Effect):
 
 	def exportPage(self,curfile,outfile,bgcol):
 		
-		command="inkscape -C -e \"/tmp/jpinkexp.png\" -b\"%s\" %s" % (bgcol,curfile)
+		tmp = self.getTmpPath()
+		command="inkscape -C -e \"%sjpinkexp.png\" -b\"%s\" %s" % (tmp,bgcol,curfile)
 
 		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		return_code = p.wait()
@@ -145,12 +150,21 @@ class JPEGExport(inkex.Effect):
 		
 	def tojpeg(self,outfile):
 
-		command="convert -quality 100 -density 90 /tmp/jpinkexp.png %s" % (outfile)
+		tmp = self.getTmpPath()
+		command="convert -quality 100 -density 90 %sjpinkexp.png %s" % (tmp,outfile)
 
 		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		return_code = p.wait()
 		f = p.stdout
 		err = p.stderr
+	
+	def getTmpPath(self):
+		"""Define the temporary folder path depending on the operating system"""
+
+		if os.name == 'nt':
+			return 'C:\\WINDOWS\\Temp\\'
+		else:
+			return '/tmp/'
 
 def _main():
 	e=JPEGExport()
