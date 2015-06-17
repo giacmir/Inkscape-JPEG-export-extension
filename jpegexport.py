@@ -72,7 +72,7 @@ class JPEGExport(inkex.Effect):
 
 		root=self.document.getroot();
 
-		toty=inkex.unittouu(root.attrib['height'])
+		toty=self.getUnittouu(root.attrib['height'])
 		
 		props=['x','y','width','height']
 		
@@ -90,7 +90,7 @@ class JPEGExport(inkex.Effect):
 					command=("inkscape", "--without-gui", "--query-id", id, "--query-"+prop,self.args[-1])
 					proc=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 					proc.wait()
-					rawprops.append(math.ceil(inkex.unittouu(proc.stdout.read())))
+					rawprops.append(math.ceil(self.getUnittouu(proc.stdout.read())))
 	
 				nodeEndX=rawprops[0]+rawprops[2]
 				nodeStartY=toty-rawprops[1]-rawprops[3]
@@ -165,6 +165,14 @@ class JPEGExport(inkex.Effect):
 			return 'C:\\WINDOWS\\Temp\\'
 		else:
 			return '/tmp/'
+
+        def getUnittouu(self, param):
+            try:
+                return inkex.unittouu(param)
+
+            except AttributeError:
+                return self.unittouu(param)
+
 
 def _main():
 	e=JPEGExport()
