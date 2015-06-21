@@ -5,6 +5,8 @@
 		<param name="help" type="description">Please select the area of the drawing that you wish to export and then provide the exported file name (with full path) and the background color of the exported jpeg.</param>
         <param name="path" type="string"  _gui-text="Export path">~</param>
 		<param name="bgcol" type="string" _gui-text="Background color">#ffffff</param>
+		<param name="quality" type="string" _gui-text="Quality %">100</param>
+		<param name="density" type="string" _gui-text="Density (dots per inch). Recommended: 90 (screens) or 300 (print)">90</param>
 		<param name="page" type="boolean" _gui-text="Export whole page">false</param>
 		<param name="fast" type="boolean" _gui-text="Fast export (suggested)">true</param>
         <effect>

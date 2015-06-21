@@ -26,145 +26,146 @@ import math
 import inkex
 import simpletransform
 
+
 class JPEGExport(inkex.Effect):
-	
-	def __init__(self):
-		"""init the effetc library and get options from gui"""
-		inkex.Effect.__init__(self)
 
-		self.OptionParser.add_option("--path",action="store", type="string", dest="path", default="~",help="")
-		self.OptionParser.add_option("--bgcol",action="store",type="string",dest="bgcol",default="",help="")
-		self.OptionParser.add_option("--page",action="store",type="string",dest="page",default=False,help="")
-		self.OptionParser.add_option("--fast",action="store",type="string",dest="fast",default=True,help="")
-		
+    def __init__(self):
+        """Init the effetc library and get options from gui."""
+        inkex.Effect.__init__(self)
 
-	def effect(self):
-		"""get selected item coords and call command line command to export as a png"""
+        self.OptionParser.add_option("--path",action="store", type="string", dest="path", default="~",help="")
+        self.OptionParser.add_option("--bgcol",action="store",type="string",dest="bgcol",default="",help="")
+        self.OptionParser.add_option("--quality",action="store",type="string",dest="quality",default="",help="")
+        self.OptionParser.add_option("--density",action="store",type="string",dest="density",default="",help="")
+        self.OptionParser.add_option("--page",action="store",type="string",dest="page",default=False,help="")
+        self.OptionParser.add_option("--fast",action="store",type="string",dest="fast",default=True,help="")
 
-		
-		outfile=self.options.path
-		curfile = self.args[-1]
-		bgcol = self.options.bgcol
-		
-		if self.options.page == "false":
-
-			if len(self.selected)==0:
-				sys.stderr.write('Please select something.')
-				exit()
+    def effect(self):
+        """get selected item coords and call command line command to export as a png"""
 
 
-			coords=self.processSelected()
-			self.exportArea(int(coords[0]),int(coords[1]),int(coords[2]),int(coords[3]),curfile,outfile,bgcol)
+        outfile=self.options.path
+        curfile = self.args[-1]
+        bgcol = self.options.bgcol
 
-		elif self.options.page == "true":
-			
-			self.exportPage(curfile,outfile,bgcol)
-		
+        if self.options.page == "false":
 
-
-	def processSelected(self):
-		"""Iterate trough nodes and find the bounding coordinates of the selected area"""
-		startx=None
-		starty=None
-		endx=None
-		endy=None
-		nodelist=[]
-
-		root=self.document.getroot();
-
-		toty=self.getUnittouu(root.attrib['height'])
-		
-		props=['x','y','width','height']
-		
-		for id in self.selected:
-		
-			if self.options.fast == "true": # uses simpletransform
-				
-				nodelist.append(self.getElementById(id))
-
-			else: # uses command line 
-				rawprops=[]
-	
-				for prop in props:
-					
-					command=("inkscape", "--without-gui", "--query-id", id, "--query-"+prop,self.args[-1])
-					proc=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-					proc.wait()
-					rawprops.append(math.ceil(self.getUnittouu(proc.stdout.read())))
-	
-				nodeEndX=rawprops[0]+rawprops[2]
-				nodeStartY=toty-rawprops[1]-rawprops[3]
-				nodeEndY=toty-rawprops[1]
-	
-				if rawprops[0] < startx or startx==None: 
-					startx=rawprops[0]
-	
-				if  nodeStartY < starty or starty == None:
-					starty = nodeStartY
-	
-				
-				if nodeEndX > endx or endx == None:
-					endx = nodeEndX
-	
-				if nodeEndY > endy or endy == None:
-					endy = nodeEndY
+            if len(self.selected) == 0:
+                sys.stderr.write('Please select something.')
+                exit()
 
 
-		if self.options.fast == "true": # uses simpletransform
+            coords=self.processSelected()
+            self.exportArea(int(coords[0]),int(coords[1]),int(coords[2]),int(coords[3]),curfile,outfile,bgcol)
 
-			bbox=simpletransform.computeBBox(nodelist)
+        elif self.options.page == "true":
 
-			startx=math.ceil(bbox[0])
-			endx=math.ceil(bbox[1])
-			h=-bbox[2]+bbox[3]
-			starty=toty-math.ceil(bbox[2])-h
-			endy=toty-math.ceil(bbox[2])
+            self.exportPage(curfile,outfile,bgcol)
 
-		coords=[startx,starty,endx,endy]
-		return coords
 
-	def exportArea(self,x0,y0,x1,y1,curfile,outfile,bgcol):
-		
-		tmp = self.getTmpPath()
-		command="inkscape -a %s:%s:%s:%s -e \"%sjpinkexp.png\" -b \"%s\" %s" % (x0, y0, x1, y1,tmp,bgcol,curfile)
 
-		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		return_code = p.wait()
-		f = p.stdout
-		err = p.stderr
+    def processSelected(self):
+        """Iterate trough nodes and find the bounding coordinates of the selected area"""
+        startx=None
+        starty=None
+        endx=None
+        endy=None
+        nodelist=[]
 
-		self.tojpeg(outfile)
+        root=self.document.getroot();
 
-	def exportPage(self,curfile,outfile,bgcol):
-		
-		tmp = self.getTmpPath()
-		command="inkscape -C -e \"%sjpinkexp.png\" -b\"%s\" %s" % (tmp,bgcol,curfile)
+        toty=self.getUnittouu(root.attrib['height'])
 
-		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		return_code = p.wait()
-		f = p.stdout
-		err = p.stderr
+        props=['x','y','width','height']
 
-		self.tojpeg(outfile)
+        for id in self.selected:
 
-		
-	def tojpeg(self,outfile):
+            if self.options.fast == "true":  # uses simpletransform
 
-		tmp = self.getTmpPath()
-		command="convert -quality 100 -density 90 %sjpinkexp.png %s" % (tmp,outfile)
+                nodelist.append(self.getElementById(id))
 
-		p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		return_code = p.wait()
-		f = p.stdout
-		err = p.stderr
-	
-	def getTmpPath(self):
-		"""Define the temporary folder path depending on the operating system"""
+            else:  # uses command line
+                rawprops=[]
 
-		if os.name == 'nt':
-			return 'C:\\WINDOWS\\Temp\\'
-		else:
-			return '/tmp/'
+                for prop in props:
+
+                    command=("inkscape", "--without-gui", "--query-id", id, "--query-"+prop,self.args[-1])
+                    proc=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+                    proc.wait()
+                    rawprops.append(math.ceil(self.getUnittouu(proc.stdout.read())))
+
+                nodeEndX=rawprops[0]+rawprops[2]
+                nodeStartY=toty-rawprops[1]-rawprops[3]
+                nodeEndY=toty-rawprops[1]
+
+                if rawprops[0] < startx or startx is None:
+                    startx=rawprops[0]
+
+                if nodeStartY < starty or starty is None:
+                    starty = nodeStartY
+
+                if nodeEndX > endx or endx is None:
+                    endx = nodeEndX
+
+                if nodeEndY > endy or endy is None:
+                    endy = nodeEndY
+
+
+        if self.options.fast == "true":  # uses simpletransform
+
+            bbox=simpletransform.computeBBox(nodelist)
+
+            startx=math.ceil(bbox[0])
+            endx=math.ceil(bbox[1])
+            h=-bbox[2]+bbox[3]
+            starty=toty-math.ceil(bbox[2])-h
+            endy=toty-math.ceil(bbox[2])
+
+        coords=[startx,starty,endx,endy]
+        return coords
+
+    def exportArea(self,x0,y0,x1,y1,curfile,outfile,bgcol):
+
+        tmp = self.getTmpPath()
+        command="inkscape -a %s:%s:%s:%s -d %s -e \"%sjpinkexp.png\" -b \"%s\" %s" % (x0, y0, x1, y1, self.options.density,tmp,bgcol,curfile)
+
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return_code = p.wait()
+        f = p.stdout
+        err = p.stderr
+
+        self.tojpeg(outfile)
+
+    def exportPage(self,curfile,outfile,bgcol):
+
+        tmp = self.getTmpPath()
+        command="inkscape -C -d %s -e \"%sjpinkexp.png\" -b\"%s\" %s" % (self.options.density,tmp,bgcol,curfile)
+
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return_code = p.wait()
+        f = p.stdout
+        err = p.stderr
+
+        self.tojpeg(outfile)
+
+
+    def tojpeg(self,outfile):
+
+        tmp = self.getTmpPath()
+
+        command="convert -quality %s -density %s %sjpinkexp.png %s" % (self.options.quality,self.options.density,tmp,outfile)
+        p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return_code = p.wait()
+        f = p.stdout
+        err = p.stderr
+
+    def getTmpPath(self):
+        """Define the temporary folder path depending on the operating system"""
+
+        if os.name == 'nt':
+            return 'C:\\WINDOWS\\Temp\\'
+        else:
+            return '/tmp/'
 
         def getUnittouu(self, param):
             try:
@@ -175,9 +176,9 @@ class JPEGExport(inkex.Effect):
 
 
 def _main():
-	e=JPEGExport()
-	e.affect()
-	exit()
+    e=JPEGExport()
+    e.affect()
+    exit()
 
 if __name__=="__main__":
-	_main()
+    _main()
