@@ -5,6 +5,8 @@
 		<param name="help" type="description">エクスポートしたい描画領域を選択し、エクスポートされるファイル名（フルパス）とJPEGの背景色を入力してください。 </param>
         <param name="path" type="string"  _gui-text="エクスポートパス">~</param>
 		<param name="bgcol" type="string" _gui-text="背景色">#ffffff</param>
+		<param name="quality" type="int" min="0" max="100" _gui-text="Quality %">100</param>
+		<param name="density" type="int" min="30" max="300" _gui-text="Density (dots per inch). Recommended: 90 (screens) or 300 (print)">90</param>
 		<param name="page" type="boolean" _gui-text="ページ全体をエクスポート">false</param>
 		<param name="fast" type="boolean" _gui-text="高速エクスポート (推奨)">true</param>
         <effect>

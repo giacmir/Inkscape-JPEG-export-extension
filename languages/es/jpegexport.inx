@@ -5,6 +5,8 @@
 		<param name="help" type="description">Configurar párametros</param>
         <param name="path" type="string"  _gui-text="Ubicación">~</param>
 		<param name="bgcol" type="string" _gui-text="Color de fondo">#ffffff</param>
+		<param name="quality" type="int" min="0" max="100" _gui-text="Quality %">100</param>
+		<param name="density" type="int" min="30" max="300" _gui-text="Density (dots per inch). Recommended: 90 (screens) or 300 (print)">90</param>
 		<param name="page" type="boolean" _gui-text="Exportar página">false</param>
 		<param name="fast" type="boolean" _gui-text="Ràpido (recomendado)">true</param>
         <effect>

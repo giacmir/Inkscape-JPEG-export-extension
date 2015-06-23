@@ -167,12 +167,12 @@ class JPEGExport(inkex.Effect):
         else:
             return '/tmp/'
 
-        def getUnittouu(self, param):
-            try:
-                return inkex.unittouu(param)
+    def getUnittouu(self, param):
+        try:
+            return inkex.unittouu(param)
 
-            except AttributeError:
-                return self.unittouu(param)
+        except AttributeError:
+            return self.unittouu(param)
 
 
 def _main():

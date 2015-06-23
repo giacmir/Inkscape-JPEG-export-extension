@@ -5,6 +5,8 @@
 		<param name="help" type="description">Selezionare l'area del disegno che si desidera esportare e indicare nome e percorso del file di destinazione e il colore di sfondo del jpeg risultante.</param>
         <param name="path" type="string"  _gui-text="Percorso di esportazione">~</param>
 		<param name="bgcol" type="string" _gui-text="Colore di sfondo">#ffffff</param>
+		<param name="quality" type="int" min="0" max="100" _gui-text="Qualità">100</param>
+		<param name="density" type="int" min="30" max="300" _gui-text="Risoluzione (dpi)">90</param>
 		<param name="page" type="boolean" _gui-text="Esporta tutta la pagina">false</param>
 		<param name="fast" type="boolean" _gui-text="Esportazione veloce (consigliato)">true</param>
         <effect>
