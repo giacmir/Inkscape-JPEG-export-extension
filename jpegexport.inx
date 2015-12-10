@@ -1,22 +1,28 @@
-    <inkscape-extension>
-        <_name>JPEG Export</_name>
-        <id>id.giac.export.jpg</id>
-        <dependency type="executable" location="extensions">jpegexport.py</dependency>
-		<param name="help" type="description">Please select the area of the drawing that you wish to export and then provide the exported file name (with full path) and the background color of the exported jpeg.</param>
-        <param name="path" type="string"  _gui-text="Export path">~</param>
-		<param name="bgcol" type="string" _gui-text="Background color">#ffffff</param>
-		<param name="quality" type="int" min="0" max="100" _gui-text="Quality %">100</param>
-		<param name="density" type="int" min="30" max="300" _gui-text="Density (dots per inch). Recommended: 90 (screens) or 300 (print)">90</param>
-		<param name="page" type="boolean" _gui-text="Export whole page">false</param>
-		<param name="fast" type="boolean" _gui-text="Fast export (suggested)">true</param>
-        <effect>
-            <object-type>all</object-type>
-            <effects-menu>
-                <submenu _name="Export as JPG" />
-            </effects-menu>
-        </effect>
-        <script>
-            <command reldir="extensions" interpreter="python">jpegexport.py</command>
-        </script>
-    </inkscape-extension>
+<inkscape-extension>
+    <_name>JPEG Export</_name>
+    <id>id.giac.export.jpg</id>
+    <dependency type="executable" location="extensions">jpegexport.py</dependency>
+    <param name="path" type="string" _gui-text="Export path" _gui-description="Full path to your file, e.g. 'C:\Users\User_Name\Documents\myimage.jpg'"></param>
+    <param name="bgcol" type="string" _gui-text="Background color (leave blank for white)" _gui-description="Background color hex code, e.g. '#abc123'"></param>
+    <param name="quality" type="int" min="0" max="100" _gui-text="Quality %" _gui-description="JPG compression quality">100</param>
+    <param name="density" type="int" min="30" max="2400" _gui-text="Resolution (ppi)" _gui-description="Recommended: 90 (screens) or 300 (print)">90</param>
+    <param name="page" type="boolean" _gui-text="Export whole page"  _gui-description="If checked, the whole page will be exported, else the selection.">false</param>
+    <param name="fast" type="boolean" _gui-text="Fast export (suggested)" _gui-description="Will use an approximate bounding box. If unchecked, export will take longer.">true</param>
+    <_param name="usage" type="description" appearance="header">Usage</_param>
+    <param name="help" type="description" xml:space="preserve">Select the objects in the drawing that you wish to export, or make a check at "Export whole page".
+      
+Enter a name for your JPG file (with full path) and choose a background color for the exported image (JPG format does not support transparency). 
+      
+Leave background color field blank for white.
 
+This extension requires that imagemagick is installed, more info and download at http://www.imagemagick.org.</param>
+    <effect needs-live-preview="false">
+        <object-type>all</object-type>
+        <effects-menu>
+            <submenu _name="Export" />
+        </effects-menu>
+    </effect>
+    <script>
+        <command reldir="extensions" interpreter="python">jpegexport.py</command>
+    </script>
+</inkscape-extension>
