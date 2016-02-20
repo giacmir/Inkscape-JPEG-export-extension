@@ -29,7 +29,7 @@ The extension can be found in the ''extensions'' menu under the ''Export as JPG'
 
 ===Other languages===
 
-Some translated .inx files are provided under the '''languages/''' directory. If you wish to use one of those languages just install the .inx file located in the language folder instead of the one that is in the root folder.
+Some translated .inx files are provided under the '''languages/''' directory. If you wish to use one of those languages just install the .inx file located in the language folder instead of the one that is in the root folder. Those files are not updated regularly and may be out of sync with the main version.
 
 ====Translators====
 * '''Es''': Prar
