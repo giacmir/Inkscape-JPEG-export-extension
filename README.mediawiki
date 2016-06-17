@@ -17,13 +17,13 @@ Just drop the two jpegexport.* files in your extensions folder (usually ~/.confi
 
 == Usage ==
 
-The extension can be found in the ''extensions'' menu under the ''Export as JPG'' label. 
+The extension can be found in the Extensions menu > Export > JPEG Export.
 
 === Options ===
 
 * '''Export path''': write here the full path and file name of the resulting image.
 * '''Background color''': Since JPEG does not support transparency, the image will have a background color. Default is white, if you want to change it insert in this field the desired color in CSS hexadecimal notation (e.g. #000000 for black).
-* '''Export whole page''': check this if you want to export the whole page instead of a selection. 
+* '''Export whole page''': check this if you want to export the whole page instead of a selection.
 * '''Fast export''': use the fast or the normal export mode (see above for details). It is recommended to always check this box unless you are using masks or clips. This option has no effect if you are exporting the whole page.
 
 == Other languages ==
@@ -32,4 +32,5 @@ Some translated .inx files are provided under the '''languages/''' directory. If
 
 === Translators ===
 * '''Es''': Prar
-* '''Ja''': junichi11 [https://github.com/junichi11]
+* '''Fr''': [https://inkscape.org/fr/~Frigory Frigory]
+* '''Ja''': [https://github.com/junichi11 junichi11]

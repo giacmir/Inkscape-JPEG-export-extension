@@ -1,0 +1,27 @@
+<inkscape-extension>
+    <_name>Exporter au format JPEG</_name>
+    <id>id.giac.export.jpg</id>
+    <dependency type="executable" location="extensions">jpegexport.py</dependency>
+    <param name="path" type="string" _gui-text="Chemin de destination" _gui-description="Chemin complet vers le fichier résultant, par ex. « C:\Users\Nom_Utilisateur\Documents\mon_image.jpg »"></param>
+    <param name="bgcol" type="string" _gui-text="Couleur de l'arrière-plan" _gui-description="Couleur de l'arrière-plan sous forme de code hexadécimal CSS, par exemple « #abc123 » ; laissez vide pour utiliser du blanc"></param>
+    <param name="quality" type="int" min="0" max="100" _gui-text="Qualité en %" _gui-description="Qualité de compression JPEG">100</param>
+    <param name="density" type="int" min="30" max="2400" _gui-text="Résolution (ppp)" _gui-description="Recommandé : 90 (écrans) ou 300 (impression)">90</param>
+    <param name="page" type="boolean" _gui-text="Exporter la page"  _gui-description="Si coché, la page entière sera exportée ; si décoché, la sélection sera exportée">false</param>
+    <param name="fast" type="boolean" _gui-text="Exportation rapide" _gui-description="Si coché, l'export utilisera une boîte englobante approximative qui peut fausser le résultat ; si décoché, l'export sera beaucoup plus long">true</param>
+    <_param name="usage" type="description" appearance="header">Utilisation</_param>
+    <param name="help" type="description" xml:space="preserve">Sélectionnez les objets du document que vous souhaitez exporter, ou cochez « Exporter la page ».
+
+Entrez le nom de votre fichier JPEG (sous forme de chemin complet) et choisissez une couleur d'arrière-plan pour l'image exportée (le format JPEG ne permet pas la transparence). Laissez le champ de la couleur d'arrière-plan vide pour utiliser du blanc.
+
+Cette extension nécessite qu'ImageMagick soit installé ; informations et téléchargement sur
+http://www.imagemagick.org/</param>
+    <effect needs-live-preview="false">
+        <object-type>all</object-type>
+        <effects-menu>
+            <submenu _name="Exporter" />
+        </effects-menu>
+    </effect>
+    <script>
+        <command reldir="extensions" interpreter="python">jpegexport.py</command>
+    </script>
+</inkscape-extension>
