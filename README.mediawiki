@@ -4,7 +4,7 @@ This is a small and basic [http://inkscape.org Inkscape] extension that allows t
 
 == How it works ==
 
-This extension simply exports a PNG image and then converts it to JPG using '''ImageMagick'''; this means that you must have ImageMagick installed to make it work.
+This extension simply exports a PNG image and then converts it to JPEG using '''ImageMagick'''; this means that you must have ImageMagick installed to make it work.
 
 The extension has three exporting modes:
 * '''full page export''' exports the whole page;
@@ -28,7 +28,7 @@ The extension can be found in the Extensions menu > Export > JPEG Export.
 
 == Other languages ==
 
-Some translated .inx files are provided under the '''languages/''' directory. If you wish to use one of those languages, just install the .inx file located in the language folder instead of the one that is in the root folder. Those files are not updated regularly and may be out of sync with the main version.
+Some translated .inx files are provided under the '''translations/''' directory. If you wish to use one of those languages, just install the .inx file located in the language folder instead of the one that is in the root folder. Those files are not updated regularly and may be out of sync with the main version.
 
 === Translators ===
 * '''Es''': Prar
