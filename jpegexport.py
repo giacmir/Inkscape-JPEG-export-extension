@@ -156,7 +156,7 @@ class JPEGExport(inkex.Effect):
 
     def tojpeg(self,outfile):
         tmp = self.getTmpPath()
-        command = "convert -quality %s -density %s %sjpinkexp.png %s" % (self.options.quality, self.options.density, tmp, outfile)
+        command = "convert -quality %s -density %s \"%sjpinkexp.png\" \"%s\" " % (self.options.quality, self.options.density, tmp, outfile)
         p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return_code = p.wait()
         f = p.stdout
