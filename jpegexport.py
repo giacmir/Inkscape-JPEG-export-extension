@@ -90,6 +90,7 @@ class JPEGExport(inkex.Effect):
         nodelist=[]
         root=self.document.getroot();
         toty=self.getUnittouu(root.attrib['height'])
+        scale = self.getUnittouu('1px')
         props=['x', 'y', 'width', 'height']
 
         for id in self.selected:
@@ -102,7 +103,6 @@ class JPEGExport(inkex.Effect):
                     proc=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
                     proc.wait()
                     rawprops.append(math.ceil(self.getUnittouu(proc.stdout.read())))
-
                 nodeEndX = rawprops[0] + rawprops[2]
                 nodeStartY = toty - rawprops[1] - rawprops[3]
                 nodeEndY = toty - rawprops[1]
@@ -118,7 +118,7 @@ class JPEGExport(inkex.Effect):
 
                 if nodeEndY > endy or endy is None:
                     endy = nodeEndY
-
+        
 
         if self.options.fast == True:  # uses simpletransform
             bbox = simpletransform.computeBBox(nodelist)
@@ -128,7 +128,7 @@ class JPEGExport(inkex.Effect):
             starty = toty - math.ceil(bbox[2]) -h
             endy = toty - math.ceil(bbox[2])
 
-        coords = [startx, starty, endx, endy]
+        coords = [startx / scale, starty / scale, endx / scale, endy / scale]
         return coords
 
     def exportArea(self, x0, y0, x1, y1, curfile, outfile, bgcol):
@@ -156,7 +156,9 @@ class JPEGExport(inkex.Effect):
 
     def tojpeg(self,outfile):
         tmp = self.getTmpPath()
-        command = "convert -quality %s -density %s \"%sjpinkexp.png\" \"%s\" " % (self.options.quality, self.options.density, tmp, outfile)
+        if os.name == 'nt':
+	        outfile = outfile.encode('string-escape')
+        command = "magick -quality %s -density %s \"%sjpinkexp.png\" \"%s\" " % (self.options.quality, self.options.density, tmp, outfile)
         p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return_code = p.wait()
         f = p.stdout
