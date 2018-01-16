@@ -19,6 +19,7 @@
 import sys
 import os
 import re
+from distutils.spawn import find_executable
 
 import subprocess
 import math
@@ -158,7 +159,16 @@ class JPEGExport(inkex.Effect):
         tmp = self.getTmpPath()
         if os.name == 'nt':
 	        outfile = outfile.encode('string-escape')
-        command = "magick -quality %s -density %s \"%sjpinkexp.png\" \"%s\" " % (self.options.quality, self.options.density, tmp, outfile)
+
+        # set the ImageMagick command to run based on what's installed
+        if find_executable('magick'):
+            command = "magick -quality %s -density %s \"%sjpinkexp.png\" \"%s\" " % (self.options.quality, self.options.density, tmp, outfile)
+        elif find_executable('convert'): 
+            command = "convert \"%sjpinkexp.png\" -quality %s -density %s \"%s\" " % (tmp, self.options.quality, self.options.density, outfile)
+        else:
+            inkex.errormsg(_('ImageMagick does not appear to be installed.'))
+            exit()
+            
         p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return_code = p.wait()
         f = p.stdout
