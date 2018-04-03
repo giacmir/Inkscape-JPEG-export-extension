@@ -34,3 +34,7 @@ Some translated .inx files are provided under the '''translations/''' directory.
 * '''Es''': Prar
 * '''Fr''': [https://inkscape.org/fr/~Frigory Frigory]
 * '''Ja''': [https://github.com/junichi11 junichi11]
+
+== License ==
+
+This extension is licensed under the [https://www.gnu.org/licenses/gpl-3.0.en.html GNU General Public License version 3] or later.
