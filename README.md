@@ -16,7 +16,7 @@ The extension has three exporting modes:
 Installation
 ------------
 
-Just drop the two jpegexport.* files in your extensions folder (usually `~/.config/inkscape/extensions` on Linux or `C:\Programes\Inkscape\share\extensions` on Windows).
+Just drop the two jpegexport.* files in your extensions folder (usually `~/.config/inkscape/extensions` on Linux or `%ProgramFiles%\Inkscape\share\extensions` on Windows).
 
 Usage
 -----
