@@ -162,9 +162,9 @@ class JPEGExport(inkex.Effect):
 
         # set the ImageMagick command to run based on what's installed
         if find_executable('magick'):
-            command = "magick -quality %s -density %s \"%sjpinkexp.png\" \"%s\" " % (self.options.quality, self.options.density, tmp, outfile)
-        elif find_executable('convert'): 
-            command = "convert \"%sjpinkexp.png\" -quality %s -density %s \"%s\" " % (tmp, self.options.quality, self.options.density, outfile)
+            command = "magick -sampling-factor 4:4:4 -strip -interlace JPEG -colorspace RGB -quality %s -density %s \"%sjpinkexp.png\" \"%s\" " % (self.options.quality, self.options.density, tmp, outfile)
+        elif find_executable('convert'):
+            command = "convert \"%sjpinkexp.png\" -sampling-factor 4:4:4 -strip -interlace JPEG -colorspace RGB -quality %s -density %s \"%s\" " % (tmp, self.options.quality, self.options.density, outfile)
         else:
             inkex.errormsg(_('ImageMagick does not appear to be installed.'))
             exit()
