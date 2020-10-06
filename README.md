@@ -1,6 +1,8 @@
 Inkscape JPEG Export Extension
 ===============================
 
+**NOTE: This plugin only works with versions of inkscape prior to 1.0. Work is needed to port it to Inskcape 1.x. Feel free to open a pull request for it.**
+
 This is a small and basic [Inkscape](http://inkscape.org) extension that allows to export directly to a JPG file instead of the standard PNG. It is one of my first works in Python and is developed for my personal needs, so I will be glad if you find it useful, but I can't say if it will work for you too.
 
 How it works
